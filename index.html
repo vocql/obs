@@ -3,995 +3,247 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 World Cup Live Hub</title>
+<title>VOQCL — Welcome to Leonida</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0a0e1a;
-    --card:#121a2b;
-    --card-hi:#182338;
-    --pitch:#0f4d3a;
-    --pitch-line:#1c6b52;
-    --chalk:#f2f0e6;
-    --chalk-dim:#9aa3b8;
-    --amber:#ffb703;
-    --red:#e8483f;
-    --blue:#4a9bd8;
-    --line:rgba(242,240,230,0.08);
+    --gold:#ffb347;
+    --orange:#ff7a4d;
+    --pink:#ff4d94;
+    --magenta:#d946a8;
+    --deep:#3a1240;
+    --ink:#120a1a;
+    --glass:rgba(255,255,255,0.07);
+    --glass-border:rgba(255,255,255,0.18);
   }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:#050807;
-    color:var(--chalk);
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:var(--ink);
     font-family:'Barlow',sans-serif;
-    -webkit-font-smoothing:antialiased;
-    position:relative;
-    min-height:100vh;
   }
-  body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    z-index:-2;
+  .stage{
+    position:relative;
+    width:100vw;
+    height:100vh;
     background:
-      radial-gradient(ellipse 900px 700px at 12% -8%, rgba(255,183,3,0.16), transparent 60%),
-      radial-gradient(ellipse 900px 700px at 108% -8%, rgba(255,183,3,0.16), transparent 60%),
-      radial-gradient(ellipse 1000px 800px at 50% 105%, rgba(232,72,63,0.10), transparent 65%),
-      radial-gradient(ellipse 1400px 1000px at 50% 40%, rgba(28,107,82,0.35), transparent 70%),
-      linear-gradient(180deg, #060b09 0%, #050807 45%, #030503 100%);
-    animation:floodlight-drift 22s ease-in-out infinite;
-  }
-  body::after{
-    content:"";
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    pointer-events:none;
-    background-image:
-      repeating-linear-gradient(0deg, rgba(242,240,230,0.025) 0px, rgba(242,240,230,0.025) 1px, transparent 1px, transparent 3px),
-      radial-gradient(ellipse 1200px 900px at 50% 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
-    mix-blend-mode:overlay;
-  }
-  @keyframes floodlight-drift{
-    0%,100%{filter:brightness(1);}
-    50%{filter:brightness(1.08);}
-  }
-  h1,h2,h3{
-    font-family:'Anton',sans-serif;
-    font-weight:400;
-    letter-spacing:0.5px;
-    margin:0;
-    text-transform:uppercase;
-  }
-  .mono{font-family:'Space Mono',monospace;}
-
-  /* ---- LED ticker ---- */
-  .ticker-wrap{
-    background:#000;
-    border-top:2px solid var(--pitch-line);
-    border-bottom:2px solid var(--pitch-line);
-    overflow:hidden;
-    position:relative;
-    height:44px;
-    display:flex;
-    align-items:center;
-  }
-  .ticker-track{
-    display:flex;
-    gap:60px;
-    white-space:nowrap;
-    animation:scroll-left 38s linear infinite;
-    padding-left:100%;
-  }
-  .ticker-item{
-    color:var(--amber);
-    font-family:'Space Mono',monospace;
-    font-size:15px;
-    letter-spacing:1px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .ticker-item .live-dot{
-    width:8px;height:8px;border-radius:50%;
-    background:var(--red);
-    box-shadow:0 0 6px var(--red);
-    animation:pulse 1.2s ease-in-out infinite;
-  }
-  @keyframes scroll-left{
-    from{transform:translateX(0);}
-    to{transform:translateX(-100%);}
-  }
-  @keyframes pulse{
-    0%,100%{opacity:1;}
-    50%{opacity:0.25;}
-  }
-
-  /* ---- layout ---- */
-  .wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px;}
-  header.hero{
-    padding:56px 0 40px;
-    border-bottom:1px solid var(--line);
-  }
-  .eyebrow{
-    color:var(--amber);
-    font-family:'Space Mono',monospace;
-    font-size:13px;
-    letter-spacing:3px;
-    text-transform:uppercase;
-    margin-bottom:14px;
-  }
-  header.hero h1{
-    font-size:56px;
-    line-height:1.02;
-  }
-  header.hero .sub{
-    color:var(--chalk-dim);
-    font-size:17px;
-    margin-top:16px;
-    max-width:620px;
-  }
-
-  .section{padding:48px 0;border-bottom:1px solid var(--line);}
-  .section h2{
-    font-size:26px;
-    margin-bottom:22px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
-  .section h2::before{
-    content:"";
-    width:6px;height:24px;
-    background:var(--amber);
-    display:inline-block;
-  }
-
-  /* match cards */
-  .match-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
-  .match-card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:6px;
-    padding:18px 20px;
-    position:relative;
-    cursor:pointer;
-    transition:border-color 0.15s ease, transform 0.15s ease;
-  }
-  .match-card:hover{
-    border-color:var(--pitch-line);
-    transform:translateY(-2px);
-  }
-  .match-card.live{border-color:var(--red);}
-  .match-card .tap-hint{
-    position:absolute;
-    top:16px;right:18px;
-    font-family:'Space Mono',monospace;
-    font-size:10px;
-    color:var(--chalk-dim);
-    letter-spacing:1px;
-    text-transform:uppercase;
-  }
-  .match-status{
-    font-family:'Space Mono',monospace;
-    font-size:12px;
-    color:var(--chalk-dim);
-    letter-spacing:1px;
-    text-transform:uppercase;
-    margin-bottom:12px;
-    display:flex;align-items:center;gap:8px;
-  }
-  .match-status.is-live{color:var(--red);}
-  .match-status .dot{
-    width:7px;height:7px;border-radius:50%;background:var(--red);
-    animation:pulse 1.2s ease-in-out infinite;
-  }
-  .teams{display:flex;flex-direction:column;gap:8px;}
-  .team-row{display:flex;justify-content:space-between;align-items:center;}
-  .team-name{font-size:16px;font-weight:600;}
-  .team-score{
-    font-family:'Space Mono',monospace;
-    font-size:22px;
-    color:var(--amber);
-    font-weight:700;
-  }
-  .match-venue{
-    margin-top:12px;
-    padding-top:12px;
-    border-top:1px solid var(--line);
-    font-size:12px;
-    color:var(--chalk-dim);
-  }
-
-  /* recent results list */
-  .results-list{display:flex;flex-direction:column;gap:0;}
-  .result-row{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:14px 0;
-    border-bottom:1px solid var(--line);
-    font-size:15px;
-    cursor:pointer;
-  }
-  .result-row:hover .rteams{color:var(--amber);}
-  .result-row .rteams{display:flex;gap:10px;align-items:center;transition:color 0.15s ease;}
-  .result-row .rscore{font-family:'Space Mono',monospace;color:var(--amber);font-weight:700;}
-  .result-row .rdate{color:var(--chalk-dim);font-size:12px;font-family:'Space Mono',monospace;}
-
-  /* news */
-  .news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;}
-  .news-card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:6px;
-    padding:20px;
-  }
-  .news-tag{
-    font-family:'Space Mono',monospace;
-    font-size:11px;
-    color:var(--pitch-line);
-    background:rgba(28,107,82,0.25);
-    display:inline-block;
-    padding:3px 8px;
-    border-radius:3px;
-    margin-bottom:10px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-  }
-  .news-card h3{
-    font-family:'Barlow',sans-serif;
-    font-weight:700;
-    font-size:17px;
-    text-transform:none;
-    letter-spacing:0;
-    margin-bottom:8px;
-  }
-  .news-card p{
-    color:var(--chalk-dim);
-    font-size:14px;
-    line-height:1.5;
-    margin:0;
-  }
-
-  /* watch legally */
-  .watch-box{
-    background:linear-gradient(180deg,var(--card),var(--card-hi));
-    border:1px solid var(--pitch-line);
-    border-radius:6px;
-    padding:28px;
-  }
-  .watch-box .note{
-    font-size:13px;
-    color:var(--chalk-dim);
-    margin-bottom:20px;
-    line-height:1.6;
-    max-width:640px;
-  }
-  .watch-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
-  .watch-card{
-    background:var(--navy);
-    border:1px solid var(--line);
-    border-radius:6px;
-    padding:16px 18px;
-    display:flex;flex-direction:column;gap:6px;
-  }
-  .watch-card .broadcaster{font-weight:700;font-size:16px;}
-  .watch-card .lang{font-size:12px;color:var(--chalk-dim);font-family:'Space Mono',monospace;}
-  .watch-card a{
-    margin-top:10px;
-    color:var(--amber);
-    text-decoration:none;
-    font-size:13px;
-    font-family:'Space Mono',monospace;
-  }
-  .watch-card a:hover{text-decoration:underline;}
-
-  footer{
-    padding:30px 0;
-    text-align:center;
-    color:var(--chalk-dim);
-    font-size:12px;
-    font-family:'Space Mono',monospace;
-  }
-
-  /* ---- match detail modal ---- */
-  .modal-overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(4,6,12,0.82);
-    z-index:1000;
-    overflow-y:auto;
-    padding:40px 20px;
-  }
-  .modal-overlay.open{display:block;}
-  .modal-box{
-    max-width:900px;
-    margin:0 auto;
-    background:var(--card);
-    border:1px solid var(--pitch-line);
-    border-radius:8px;
-    padding:0;
-    overflow:hidden;
-  }
-  .modal-close{
-    position:absolute;
-    top:16px; right:20px;
-    background:none;
-    border:1px solid var(--line);
-    color:var(--chalk);
-    width:34px;height:34px;
-    border-radius:50%;
-    font-size:18px;
-    cursor:pointer;
-    z-index:2;
-  }
-  .modal-close:hover{border-color:var(--amber);color:var(--amber);}
-  .modal-hero{
-    position:relative;
-    background:linear-gradient(135deg,var(--pitch),#0a3527);
-    padding:32px 32px 24px;
-  }
-  .modal-status{
-    font-family:'Space Mono',monospace;
-    font-size:12px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    color:var(--chalk-dim);
-    margin-bottom:16px;
-  }
-  .modal-status.is-live{color:#ffb3ad;}
-  .modal-score-row{
+      radial-gradient(ellipse at 15% 20%, rgba(255,179,71,0.35), transparent 55%),
+      radial-gradient(ellipse at 85% 80%, rgba(217,70,168,0.4), transparent 55%),
+      linear-gradient(135deg, var(--deep) 0%, #5a1a4a 35%, #a3315a 65%, #ff7a4d 100%);
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:28px;
-  }
-  .modal-team{
-    display:flex;flex-direction:column;align-items:center;gap:8px;
-    flex:1;
-  }
-  .modal-team .crest{
-    width:56px;height:56px;
-    border-radius:50%;
-    background:var(--card-hi);
-    border:2px solid var(--line);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Anton',sans-serif;
-    font-size:18px;
-    color:var(--amber);
-  }
-  .modal-team .name{font-family:'Anton',sans-serif;font-size:18px;text-transform:uppercase;text-align:center;}
-  .modal-score-big{
-    font-family:'Space Mono',monospace;
-    font-size:42px;
-    font-weight:700;
-    color:var(--amber);
-    letter-spacing:4px;
-  }
-  .modal-venue{
-    text-align:center;
-    margin-top:18px;
-    font-size:12px;
-    color:var(--chalk-dim);
   }
 
-  .modal-tabs{
+  .vignette{
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%);
+    pointer-events:none;
+  }
+
+  .horizon{
+    position:absolute;
+    bottom:0; left:0; right:0;
+    height:18vh;
+    background:linear-gradient(to top, rgba(10,4,14,0.9), transparent);
+  }
+
+  .sun{
+    position:absolute;
+    left:50%;
+    top:54%;
+    transform:translate(-50%,-50%);
+    width:min(45vw, 45vh);
+    height:min(45vw, 45vh);
+    border-radius:50%;
+    background:linear-gradient(180deg, var(--gold) 0%, var(--orange) 45%, var(--pink) 75%, var(--magenta) 100%);
+    filter:blur(2px);
+    opacity:0.55;
+    box-shadow:0 0 12vw 4vw rgba(255,122,77,0.35);
+  }
+  .sun-lines{
+    position:absolute;
+    left:50%;
+    top:54%;
+    transform:translate(-50%,-50%);
+    width:min(45vw, 45vh);
+    height:min(45vw, 45vh);
+  }
+  .sun-lines div{
+    position:absolute;
+    left:0; right:0;
+    height:0.5vh;
+    background:var(--ink);
+    opacity:0.5;
+  }
+
+  .card{
+    position:relative;
+    z-index:5;
+    width:min(85vw, 1180px);
+    padding:5vh 5vw;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    border-radius:28px;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:0 40px 100px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
+    text-align:center;
+  }
+
+  .eyebrow{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    letter-spacing:0.5em;
+    font-size:clamp(12px, 1.2vw, 22px);
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:1.5vh;
+  }
+
+  h1{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:900;
+    font-style:italic;
+    font-size:clamp(48px, 9vw, 172px);
+    line-height:0.9;
+    letter-spacing:0.01em;
+    background:linear-gradient(90deg, var(--gold), var(--orange) 40%, var(--pink) 70%, var(--magenta));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 10px 60px rgba(255,77,148,0.25);
+    text-transform:uppercase;
+  }
+
+  h1 span{
+    display:block;
+    font-size:clamp(28px, 5vw, 96px);
+    font-weight:800;
+    -webkit-text-fill-color:#fff;
+    color:#fff;
+    letter-spacing:0.08em;
+    margin-top:0.2em;
+  }
+
+  .divider{
+    width:min(10vw, 140px);
+    height:5px;
+    margin:3vh auto;
+    border-radius:4px;
+    background:linear-gradient(90deg, var(--gold), var(--pink));
+  }
+
+  .sub{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:500;
+    font-size:clamp(16px, 1.8vw, 34px);
+    letter-spacing:0.06em;
+    color:rgba(255,255,255,0.88);
+  }
+
+  .tagline{
+    margin-top:1.2vh;
+    font-size:clamp(10px, 1vw, 20px);
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.55);
+    font-weight:600;
+  }
+
+  .badge{
+    position:absolute;
+    top:4vh;
+    right:4vw;
+    z-index:6;
     display:flex;
-    border-bottom:1px solid var(--line);
-    background:var(--card);
-    padding:0 32px;
+    align-items:center;
+    gap:0.8vw;
+    padding:1vh 1.5vw;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    border-radius:100px;
+    backdrop-filter:blur(14px);
   }
-  .modal-tab{
-    padding:16px 4px;
-    margin-right:28px;
-    font-family:'Space Mono',monospace;
-    font-size:12px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    color:var(--chalk-dim);
-    cursor:pointer;
-    border-bottom:2px solid transparent;
+  .badge .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:var(--pink);
+    box-shadow:0 0 14px var(--pink);
   }
-  .modal-tab.active{color:var(--amber);border-bottom-color:var(--amber);}
-  .modal-body{padding:28px 32px 36px;}
-  .modal-pane{display:none;}
-  .modal-pane.active{display:block;}
-
-  /* stats bars */
-  .stat-row{margin-bottom:16px;}
-  .stat-labels{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:13px;margin-bottom:6px;}
-  .stat-labels .val{color:var(--amber);font-weight:700;}
-  .stat-bar-track{height:6px;background:var(--navy);border-radius:3px;overflow:hidden;display:flex;}
-  .stat-bar-home{background:var(--blue);height:100%;}
-  .stat-bar-away{background:var(--amber);height:100%;}
-  .stat-name{
-    text-align:center;
-    font-size:12px;
-    color:var(--chalk-dim);
-    text-transform:uppercase;
-    letter-spacing:1px;
-    margin-bottom:6px;
-  }
-
-  /* events timeline */
-  .event-row{
-    display:flex;align-items:center;gap:14px;
-    padding:10px 0;
-    border-bottom:1px solid var(--line);
-    font-size:14px;
-  }
-  .event-min{font-family:'Space Mono',monospace;color:var(--amber);width:40px;flex-shrink:0;}
-  .event-icon{width:16px;text-align:center;flex-shrink:0;}
-  .event-desc{color:var(--chalk-dim);}
-  .event-desc b{color:var(--chalk);}
-
-  /* lineups */
-  .lineup-cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
-  .lineup-col h4{
-    font-family:'Anton',sans-serif;
-    font-size:15px;
-    text-transform:uppercase;
-    color:var(--chalk-dim);
-    margin-bottom:14px;
-    letter-spacing:1px;
-  }
-  .lineup-player{
-    display:flex;align-items:center;gap:10px;
-    padding:8px 0;
-    border-bottom:1px solid var(--line);
-    font-size:14px;
-  }
-  .lineup-player .num{
-    font-family:'Space Mono',monospace;
-    color:var(--chalk-dim);
-    width:22px;
-    text-align:right;
-  }
-  .lineup-player .pname{flex:1;}
-  .lineup-player .pos{
-    font-family:'Space Mono',monospace;
-    font-size:11px;
-    color:var(--chalk-dim);
-  }
-  .formation-tag{
-    display:inline-block;
-    font-family:'Space Mono',monospace;
-    font-size:12px;
-    color:var(--amber);
-    background:rgba(255,183,3,0.1);
-    padding:2px 10px;
-    border-radius:3px;
-    margin-bottom:12px;
-  }
-
-  /* player cards */
-  .player-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
-  .player-card{
-    background:var(--navy);
-    border:1px solid var(--line);
-    border-radius:6px;
-    padding:16px;
-    text-align:center;
-  }
-  .player-card .avatar{
-    width:52px;height:52px;
-    border-radius:50%;
-    background:var(--card-hi);
-    border:2px solid var(--pitch-line);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Anton',sans-serif;
-    font-size:16px;
-    color:var(--amber);
-    margin:0 auto 10px;
-  }
-  .player-card .pname{font-weight:700;font-size:14px;margin-bottom:2px;}
-  .player-card .pteam{font-size:11px;color:var(--chalk-dim);margin-bottom:10px;font-family:'Space Mono',monospace;}
-  .player-card .rating{
-    display:inline-block;
-    font-family:'Space Mono',monospace;
-    font-size:15px;
+  .badge span{
+    font-family:'Barlow Condensed', sans-serif;
     font-weight:700;
-    padding:3px 12px;
-    border-radius:3px;
-    background:rgba(255,183,3,0.15);
-    color:var(--amber);
-    margin-bottom:8px;
+    letter-spacing:0.15em;
+    font-size:clamp(11px, 1.1vw, 22px);
+    color:#fff;
+    text-transform:uppercase;
+    white-space:nowrap;
   }
-  .player-card .note{font-size:12px;color:var(--chalk-dim);line-height:1.4;}
 
-  @media(max-width:640px){
-    header.hero h1{font-size:38px;}
-    .lineup-cols{grid-template-columns:1fr;}
-    .modal-score-row{gap:12px;}
-    .modal-score-big{font-size:30px;}
-    .modal-tabs{padding:0 16px;overflow-x:auto;}
-    .modal-body{padding:20px 16px 28px;}
+  .corner-mark{
+    position:absolute;
+    left:4vw;
+    top:4vh;
+    z-index:6;
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:800;
+    font-size:clamp(16px, 1.6vw, 30px);
+    letter-spacing:0.15em;
+    color:rgba(255,255,255,0.85);
+    text-transform:uppercase;
+  }
+  .corner-mark small{
+    display:block;
+    font-size:clamp(9px, 0.85vw, 16px);
+    font-weight:500;
+    letter-spacing:0.35em;
+    color:rgba(255,255,255,0.5);
+    margin-top:4px;
+  }
+
+  @media (max-width: 700px){
+    .badge span{display:none;}
+    .badge{padding:1vh 1vh;}
   }
 </style>
 </head>
 <body>
 
-<div class="ticker-wrap">
-  <div class="ticker-track" id="tickerTrack"></div>
-</div>
+<iframe src="https://embed.cx/embed1/" width="1920" height="1080" frameborder="0" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture" scrolling="no"></iframe>
+  
+  <div class="stage">
+    <div class="sun"></div>
+    <div class="sun-lines" id="sunLines"></div>
+    <div class="vignette"></div>
+    <div class="horizon"></div>
 
-<div class="wrap">
-  <header class="hero">
-    <div class="eyebrow">Round of 16 &middot; July 6&ndash;11, 2026</div>
-    <h1>World Cup Live Hub</h1>
-    <p class="sub">Live scores, results and news from the 2026 FIFA World Cup across the United States, Mexico and Canada. Knockout stage is underway &mdash; 48 teams down to the final 16. Tap any match for stats, lineups and player cards.</p>
-  </header>
+    <div class="corner-mark">VOQCL<small>Broadcast</small></div>
+    <div class="badge"><div class="dot"></div><span>Live from Leonida</span></div>
 
-  <section class="section">
-    <h2>Today &amp; Tomorrow</h2>
-    <div class="match-grid" id="liveGrid"></div>
-  </section>
-
-  <section class="section">
-    <h2>Recent Results</h2>
-    <div class="results-list" id="resultsList"></div>
-  </section>
-
-  <section class="section">
-    <h2>Latest News</h2>
-    <div class="news-grid" id="newsGrid"></div>
-  </section>
-
-  <section class="section" style="border-bottom:none;">
-    <h2>Watch Live</h2>
-    <div class="watch-box">
-      <p class="note">
-        Every match is officially broadcast &mdash; no unofficial stream can legally show it, and rip-and-relay sites get taken down constantly and often carry malware in their ad networks. Here's where to actually watch, legally and reliably:
-      </p>
-      <div class="watch-options" id="watchGrid"></div>
+    <div class="card">
+      <div class="eyebrow">GTA VI Fan Coverage</div>
+      <h1>Welcome<span>to Leonida</span></h1>
+      <div class="divider"></div>
+      <div class="sub">The unofficial home for everything Vice City</div>
+      <div class="tagline">vocql.github.io / leonida</div>
     </div>
-  </section>
-
-  <footer>
-    Built for VOQCL &middot; scores update manually &mdash; hook this up to a live sports API for real-time refresh
-  </footer>
-</div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box" style="position:relative;">
-    <button class="modal-close" id="modalClose">&times;</button>
-    <div id="modalContent"></div>
   </div>
-</div>
+
+
 
 <script>
-// ---- Live data config ----
-// API-Football (api-sports.io) key. Client-side keys are visible in page source -
-// fine for personal-scale use, but rotate this key and move it behind a small
-// server-side proxy (e.g. a Cloudflare Worker) before sharing this page widely.
-const API_KEY = "1ffe55229a6b118a381265132060718a";
-const API_BASE = "https://v3.football.api-sports.io";
-const LEAGUE_ID = 1;   // World Cup
-const SEASON = 2026;
-const POLL_MS = 60000; // refresh every 60s
-
-let matches = [];
-let recentResults = [];
-const detailCache = {};
-
-async function apiGet(path, params){
-  const url = new URL(API_BASE + path);
-  Object.entries(params || {}).forEach(([k,v]) => url.searchParams.set(k, v));
-  const res = await fetch(url.toString(), {
-    headers: { "x-apisports-key": API_KEY }
-  });
-  if(!res.ok) throw new Error("API request failed: " + res.status);
-  const json = await res.json();
-  if(json.errors && Object.keys(json.errors).length){
-    throw new Error(JSON.stringify(json.errors));
+  const wrap = document.getElementById('sunLines');
+  const count = 9;
+  for(let i=0;i<count;i++){
+    const y = (47 + i * 5.3) + '%';
+    const bar = document.createElement('div');
+    bar.style.top = y;
+    bar.style.height = (0.4 + i*0.15) + 'vh';
+    wrap.appendChild(bar);
   }
-  return json.response || [];
-}
-
-function statusLabel(fx){
-  const short = fx.fixture.status.short;
-  const elapsed = fx.fixture.status.elapsed;
-  const live = ["1H","2H","HT","ET","P","BT"].includes(short);
-  if(short === "NS"){
-    const d = new Date(fx.fixture.date);
-    return { text: d.toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}), live:false, finished:false };
-  }
-  if(live) return { text: short === "HT" ? "Half-time" : `Live &middot; ${elapsed}'`, live:true, finished:false };
-  if(["FT","AET","PEN"].includes(short)) return { text: short === "PEN" ? "Full-time (pens)" : "Full-time", live:false, finished:true };
-  return { text: short, live:false, finished:false };
-}
-
-function fixtureToMatch(fx){
-  const st = statusLabel(fx);
-  return {
-    id: String(fx.fixture.id),
-    status: st.text,
-    live: st.live,
-    finished: st.finished,
-    home: fx.teams.home.name,
-    homeLogo: fx.teams.home.logo,
-    homeAbbr: fx.teams.home.name.slice(0,3).toUpperCase(),
-    away: fx.teams.away.name,
-    awayLogo: fx.teams.away.logo,
-    awayAbbr: fx.teams.away.name.slice(0,3).toUpperCase(),
-    homeScore: fx.goals.home,
-    awayScore: fx.goals.away,
-    venue: `${fx.fixture.venue.name || 'TBD'}${fx.fixture.venue.city ? ', ' + fx.fixture.venue.city : ''}`
-  };
-}
-
-async function loadFixtures(){
-  try{
-    const upcoming = await apiGet("/fixtures", { league: LEAGUE_ID, season: SEASON, next: 8 });
-    const live = await apiGet("/fixtures", { league: LEAGUE_ID, season: SEASON, live: "all" });
-    const liveIds = new Set(live.map(f => f.fixture.id));
-    const merged = [...live, ...upcoming.filter(f => !liveIds.has(f.fixture.id))].slice(0,6);
-    matches = merged.map(fixtureToMatch);
-    renderTicker();
-    renderMatches();
-    hideApiError();
-  }catch(err){
-    showApiError(err);
-  }
-}
-
-async function loadRecentResults(){
-  try{
-    const finished = await apiGet("/fixtures", { league: LEAGUE_ID, season: SEASON, last: 8 });
-    recentResults = finished
-      .filter(f => ["FT","AET","PEN"].includes(f.fixture.status.short))
-      .map(f => ({
-        home: f.teams.home.name,
-        homeScore: f.goals.home,
-        away: f.teams.away.name,
-        awayScore: f.goals.away,
-        date: new Date(f.fixture.date).toLocaleDateString(undefined,{month:'short',day:'numeric'}) + (f.fixture.status.short==="PEN" ? " (pens)" : "")
-      }));
-    renderResults();
-  }catch(err){
-    showApiError(err);
-  }
-}
-
-function showApiError(err){
-  let banner = document.getElementById('apiErrorBanner');
-  if(!banner){
-    banner = document.createElement('div');
-    banner.id = 'apiErrorBanner';
-    banner.style.cssText = "background:rgba(232,72,63,0.12);border:1px solid var(--red);color:var(--chalk);padding:12px 16px;border-radius:6px;margin-bottom:20px;font-size:13px;";
-    const wrap = document.querySelector('.wrap');
-    wrap.insertBefore(banner, wrap.children[1]);
-  }
-  banner.innerHTML = "Live data request failed (key, quota, or a CORS block from the API) &mdash; showing the last data loaded. Check the browser console for details.";
-  console.error("World Cup live data error:", err);
-}
-function hideApiError(){
-  const banner = document.getElementById('apiErrorBanner');
-  if(banner) banner.remove();
-}
-
-const news = [
-  {
-    tag: "Round of 16",
-    title: "Spain and Portugal renew rivalry with a quarterfinal on the line",
-    body: "The Iberian rivals meet in the knockout stage for only the third time in World Cup history, with Spain unbeaten and unscored-on through the group and Round of 32."
-  },
-  {
-    tag: "USMNT",
-    title: "Balogun cleared to face Belgium after suspension reversal",
-    body: "FIFA reversed a one-game ban on the USMNT's top scorer ahead of tonight's Round of 16 clash in Seattle, ruling the federation's appeal request inadmissible."
-  },
-  {
-    tag: "Storyline",
-    title: "Cape Verde's run has been the story of the tournament",
-    body: "The debutants pushed Argentina deep into their Round of 32 match before falling 3-2, capping a group-stage upset run that turned them into a breakout favorite."
-  },
-  {
-    tag: "Golden Boot",
-    title: "Haaland leads the scoring race after eliminating Brazil",
-    body: "Norway's talisman continues to top the Golden Boot tracker following a quarterfinal-clinching win over Brazil, with Messi, Mbappe and Kane close behind."
-  }
-];
-
-const watchOptions = [
-  { name: "FOX / FS1", lang: "English &middot; USA", url: "https://www.foxsports.com/live" },
-  { name: "FOX One (streaming)", lang: "English &middot; USA", url: "https://www.foxsports.com/fox-one" },
-  { name: "Telemundo / Universo", lang: "Spanish &middot; USA", url: "https://www.telemundo.com/en-vivo" },
-  { name: "TSN / CTV", lang: "English &middot; Canada", url: "https://www.tsn.ca/watch" },
-  { name: "TUDN", lang: "Spanish &middot; Mexico", url: "https://www.tudn.com/en-vivo" }
-];
-
-function initials(name){
-  return name.split(' ').map(w => w[0]).join('').slice(0,3).toUpperCase();
-}
-
-function renderTicker(){
-  const track = document.getElementById('tickerTrack');
-  const items = [...matches, ...matches].map(m => {
-    const scoreTxt = (m.homeScore !== null && m.awayScore !== null)
-      ? `${m.home} ${m.homeScore} - ${m.awayScore} ${m.away}`
-      : `${m.home} vs ${m.away} &middot; ${m.status.replace('&middot;','-')}`;
-    return `<span class="ticker-item">${m.live ? '<span class="live-dot"></span>' : ''}${scoreTxt}</span>`;
-  }).join('');
-  track.innerHTML = items;
-}
-
-function renderMatches(){
-  const grid = document.getElementById('liveGrid');
-  grid.innerHTML = matches.map(m => `
-    <div class="match-card ${m.live ? 'live' : ''}" data-match="${m.id}">
-      <div class="tap-hint">Tap for stats &rarr;</div>
-      <div class="match-status ${m.live ? 'is-live' : ''}">${m.live ? '<span class="dot"></span>' : ''}${m.status}</div>
-      <div class="teams">
-        <div class="team-row">
-          <span class="team-name">${m.home}</span>
-          <span class="team-score">${m.homeScore !== null ? m.homeScore : '&ndash;'}</span>
-        </div>
-        <div class="team-row">
-          <span class="team-name">${m.away}</span>
-          <span class="team-score">${m.awayScore !== null ? m.awayScore : '&ndash;'}</span>
-        </div>
-      </div>
-      <div class="match-venue">${m.venue}</div>
-    </div>
-  `).join('');
-  grid.querySelectorAll('.match-card').forEach(card => {
-    card.addEventListener('click', () => openModal(card.dataset.match));
-  });
-}
-
-function renderResults(){
-  const list = document.getElementById('resultsList');
-  list.innerHTML = recentResults.map(r => `
-    <div class="result-row">
-      <div class="rteams">
-        <span>${r.home}</span>
-        <span class="rscore">${r.homeScore} - ${r.awayScore}</span>
-        <span>${r.away}</span>
-      </div>
-      <div class="rdate">${r.date}</div>
-    </div>
-  `).join('');
-}
-
-function renderNews(){
-  const grid = document.getElementById('newsGrid');
-  grid.innerHTML = news.map(n => `
-    <div class="news-card">
-      <div class="news-tag">${n.tag}</div>
-      <h3>${n.title}</h3>
-      <p>${n.body}</p>
-    </div>
-  `).join('');
-}
-
-function renderWatch(){
-  const grid = document.getElementById('watchGrid');
-  grid.innerHTML = watchOptions.map(w => `
-    <div class="watch-card">
-      <div class="broadcaster">${w.name}</div>
-      <div class="lang">${w.lang}</div>
-      <a href="${w.url}" target="_blank" rel="noopener">Open stream &rarr;</a>
-    </div>
-  `).join('');
-}
-
-function statBarHtml(label, homeVal, awayVal, isPercent){
-  const total = homeVal + awayVal || 1;
-  const homePct = isPercent ? homeVal : (homeVal/total*100);
-  const awayPct = isPercent ? awayVal : (awayVal/total*100);
-  return `
-    <div class="stat-row">
-      <div class="stat-labels"><span class="val">${homeVal}${isPercent?'%':''}</span><span class="stat-name">${label}</span><span class="val">${awayVal}${isPercent?'%':''}</span></div>
-      <div class="stat-bar-track">
-        <div class="stat-bar-home" style="width:${homePct}%"></div>
-        <div class="stat-bar-away" style="width:${awayPct}%"></div>
-      </div>
-    </div>
-  `;
-}
-
-function lineupColHtml(title, formation, players){
-  if(!players || players.length === 0){
-    return `<div class="lineup-col"><h4>${title}</h4><p style="color:var(--chalk-dim);font-size:13px;">Lineup announced closer to kickoff.</p></div>`;
-  }
-  return `
-    <div class="lineup-col">
-      <h4>${title}</h4>
-      <div class="formation-tag">${formation}</div>
-      ${players.map(p => `
-        <div class="lineup-player">
-          <span class="num">${p.num}</span>
-          <span class="pname">${p.name}</span>
-          <span class="pos">${p.pos}</span>
-        </div>
-      `).join('')}
-    </div>
-  `;
-}
-
-function playerCardHtml(p){
-  return `
-    <div class="player-card">
-      <div class="avatar">${initials(p.name)}</div>
-      <div class="pname">${p.name}</div>
-      <div class="pteam">${p.team}</div>
-      <div class="rating">${p.rating}</div>
-      <div class="note">${p.note}</div>
-    </div>
-  `;
-}
-
-function statValue(teamStats, ...typeNames){
-  if(!teamStats) return 0;
-  const row = teamStats.find(s => typeNames.includes(s.type));
-  if(!row || row.value === null) return 0;
-  return typeof row.value === 'string' ? parseInt(row.value) || 0 : row.value;
-}
-
-async function fetchMatchDetail(id){
-  if(detailCache[id]) return detailCache[id];
-  const [statsRes, eventsRes, lineupsRes, playersRes] = await Promise.all([
-    apiGet("/fixtures/statistics", { fixture: id }).catch(() => []),
-    apiGet("/fixtures/events", { fixture: id }).catch(() => []),
-    apiGet("/fixtures/lineups", { fixture: id }).catch(() => []),
-    apiGet("/fixtures/players", { fixture: id }).catch(() => [])
-  ]);
-
-  const homeStats = statsRes[0] ? statsRes[0].statistics : null;
-  const awayStats = statsRes[1] ? statsRes[1].statistics : null;
-  const stats = {
-    possession: [statValue(homeStats,"Ball Possession"), statValue(awayStats,"Ball Possession")],
-    shots: [statValue(homeStats,"Total Shots"), statValue(awayStats,"Total Shots")],
-    shotsOnTarget: [statValue(homeStats,"Shots on Goal"), statValue(awayStats,"Shots on Goal")],
-    corners: [statValue(homeStats,"Corner Kicks"), statValue(awayStats,"Corner Kicks")],
-    fouls: [statValue(homeStats,"Fouls"), statValue(awayStats,"Fouls")],
-    yellowCards: [statValue(homeStats,"Yellow Cards"), statValue(awayStats,"Yellow Cards")]
-  };
-
-  const iconFor = (type) => type === "Goal" ? "&#9917;" : type === "Card" ? "&#128992;" : type === "subst" ? "&#128260;" : "&#128221;";
-  const events = eventsRes.slice().reverse().map(e => ({
-    min: `${e.time.elapsed}${e.time.extra ? '+'+e.time.extra : ''}'`,
-    icon: iconFor(e.type),
-    desc: `<b>${e.player && e.player.name ? e.player.name : e.team.name}</b> &mdash; ${e.detail}${e.assist && e.assist.name ? ' (assist: ' + e.assist.name + ')' : ''}`
-  }));
-
-  const lineupHome = lineupsRes[0] || {};
-  const lineupAway = lineupsRes[1] || {};
-  const mapXI = (l) => (l.startXI || []).map(p => ({ num: p.player.number, name: p.player.name, pos: p.player.pos }));
-  const lineups = {
-    formationHome: lineupHome.formation || "&ndash;",
-    formationAway: lineupAway.formation || "&ndash;",
-    home: mapXI(lineupHome),
-    away: mapXI(lineupAway)
-  };
-
-  const allPlayers = [];
-  playersRes.forEach(teamBlock => {
-    (teamBlock.players || []).forEach(p => {
-      const stat = p.statistics && p.statistics[0];
-      const rating = stat && stat.games && stat.games.rating ? parseFloat(stat.games.rating) : null;
-      if(rating){
-        allPlayers.push({
-          name: p.player.name,
-          team: teamBlock.team.name.slice(0,3).toUpperCase(),
-          rating: rating.toFixed(1),
-          note: stat.goals && stat.goals.total ? `${stat.goals.total} goal(s), ${stat.games.minutes}' played` : `${stat.games.minutes || 0}' played`
-        });
-      }
-    });
-  });
-  allPlayers.sort((a,b) => parseFloat(b.rating) - parseFloat(a.rating));
-
-  const detail = { stats, events, lineups, playerCards: allPlayers.slice(0,4) };
-  detailCache[id] = detail;
-  return detail;
-}
-
-async function openModal(id){
-  const m = matches.find(x => x.id === id);
-  if(!m) return;
-  const content = document.getElementById('modalContent');
-  content.innerHTML = `
-    <div class="modal-hero">
-      <div class="modal-status ${m.live ? 'is-live' : ''}">${m.live ? '&#9679; ' : ''}${m.status}</div>
-      <div class="modal-score-row">
-        <div class="modal-team">
-          <div class="crest">${m.homeLogo ? `<img src="${m.homeLogo}" alt="" style="width:36px;height:36px;">` : m.homeAbbr}</div>
-          <div class="name">${m.home}</div>
-        </div>
-        <div class="modal-score-big">${m.homeScore !== null ? m.homeScore : '&ndash;'} : ${m.awayScore !== null ? m.awayScore : '&ndash;'}</div>
-        <div class="modal-team">
-          <div class="crest">${m.awayLogo ? `<img src="${m.awayLogo}" alt="" style="width:36px;height:36px;">` : m.awayAbbr}</div>
-          <div class="name">${m.away}</div>
-        </div>
-      </div>
-      <div class="modal-venue">${m.venue}</div>
-    </div>
-    <div class="modal-tabs">
-      <div class="modal-tab active" data-pane="stats">Stats</div>
-      <div class="modal-tab" data-pane="events">Match events</div>
-      <div class="modal-tab" data-pane="lineups">Lineups</div>
-      <div class="modal-tab" data-pane="players">Player cards</div>
-    </div>
-    <div class="modal-body" id="modalBody">
-      <p style="color:var(--chalk-dim);font-size:13px;">Loading live stats, lineups and events&hellip;</p>
-    </div>
-  `;
-  content.querySelectorAll('.modal-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      content.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
-      content.querySelectorAll('.modal-pane').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      const pane = content.querySelector(`.modal-pane[data-pane="${tab.dataset.pane}"]`);
-      if(pane) pane.classList.add('active');
-    });
-  });
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-
-  try{
-    const d = await fetchMatchDetail(id);
-    const body = document.getElementById('modalBody');
-    if(!body) return; // modal was closed before fetch resolved
-    body.innerHTML = `
-      <div class="modal-pane active" data-pane="stats">
-        ${statBarHtml('Possession', d.stats.possession[0], d.stats.possession[1], true)}
-        ${statBarHtml('Total shots', d.stats.shots[0], d.stats.shots[1], false)}
-        ${statBarHtml('Shots on target', d.stats.shotsOnTarget[0], d.stats.shotsOnTarget[1], false)}
-        ${statBarHtml('Corners', d.stats.corners[0], d.stats.corners[1], false)}
-        ${statBarHtml('Fouls', d.stats.fouls[0], d.stats.fouls[1], false)}
-        ${statBarHtml('Yellow cards', d.stats.yellowCards[0], d.stats.yellowCards[1], false)}
-      </div>
-      <div class="modal-pane" data-pane="events">
-        ${d.events.length ? d.events.map(e => `
-          <div class="event-row">
-            <span class="event-min">${e.min}</span>
-            <span class="event-icon">${e.icon}</span>
-            <span class="event-desc">${e.desc}</span>
-          </div>
-        `).join('') : '<p style="color:var(--chalk-dim);font-size:13px;">No events yet.</p>'}
-      </div>
-      <div class="modal-pane" data-pane="lineups">
-        <div class="lineup-cols">
-          ${lineupColHtml(m.home, d.lineups.formationHome, d.lineups.home)}
-          ${lineupColHtml(m.away, d.lineups.formationAway, d.lineups.away)}
-        </div>
-      </div>
-      <div class="modal-pane" data-pane="players">
-        ${d.playerCards.length ? `<div class="player-card-grid">${d.playerCards.map(playerCardHtml).join('')}</div>` : '<p style="color:var(--chalk-dim);font-size:13px;">Player ratings populate once the match kicks off.</p>'}
-      </div>
-    `;
-  }catch(err){
-    const body = document.getElementById('modalBody');
-    if(body) body.innerHTML = `<p style="color:var(--chalk-dim);font-size:13px;">Couldn't load match details right now (API limit or network issue). Try again shortly.</p>`;
-    console.error("Match detail error:", err);
-  }
-}
-
-function closeModal(){
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-document.getElementById('modalClose').addEventListener('click', closeModal);
-document.getElementById('modalOverlay').addEventListener('click', (e) => {
-  if(e.target.id === 'modalOverlay') closeModal();
-});
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'Escape') closeModal();
-});
-
-renderNews();
-renderWatch();
-loadFixtures();
-loadRecentResults();
-setInterval(loadFixtures, POLL_MS);
-setInterval(loadRecentResults, POLL_MS * 5);
 </script>
-
 </body>
 </html>
