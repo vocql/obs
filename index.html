@@ -770,6 +770,7 @@
     <small>From Google Cloud Console → Credentials → OAuth client ID (Web application). Must be paired with an authorized JS origin matching this page's URL.</small>
   </div>
   <div id="dash-wrap">
+    <a href="?" id="dash-backlink" style="display:inline-block; font-size:12px; color:#ffab5e; text-decoration:none; margin-bottom:18px; opacity:0.85;">&larr; All overlays</a>
     <h1>Creator Dashboard</h1>
     <div id="dash-subhead">analytics + stream scheduling, straight from your YouTube account</div>
 
@@ -1562,7 +1563,9 @@ if (accessToken) showSignedIn();
     waitForGsi(() => {
       tpTokenClient = google.accounts.oauth2.initTokenClient({
         client_id: TP_CLIENT_ID,
-        scope: 'https://www.googleapis.com/auth/youtube.readonly',
+        // Broad enough to cover the Creator Dashboard (analytics + scheduling)
+        // too, so signing in once here doesn't ask again when we land there.
+        scope: 'https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/yt-analytics.readonly',
         callback: (resp) => {
           gateBtn.disabled = false;
           if (resp.error) {
@@ -1570,8 +1573,15 @@ if (accessToken) showSignedIn();
             return;
           }
           tpToken = resp.access_token;
-          (rememberChk.checked ? localStorage : sessionStorage).setItem('tp_access_token', tpToken);
-          loadProfile();
+          const store = rememberChk.checked ? localStorage : sessionStorage;
+          const other = rememberChk.checked ? sessionStorage : localStorage;
+          store.setItem('tp_access_token', tpToken);
+          other.removeItem('tp_access_token');
+          // Share the token with the Creator Dashboard scene so it's already
+          // signed in and can show analytics immediately, no second prompt.
+          store.setItem('dash_access_token', tpToken);
+          other.removeItem('dash_access_token');
+          goToDashboard();
         }
       });
       if (cb) cb();
@@ -1633,6 +1643,12 @@ if (accessToken) showSignedIn();
     document.querySelectorAll('#menu-grid a.menu-btn').forEach(a => {
       a.setAttribute('href', a.getAttribute('href').split('&channel=')[0]);
     });
+  }
+
+  function goToDashboard() {
+    const url = new URL(location.href);
+    url.search = '?scene=dashboard';
+    location.href = url.toString();
   }
 
   function showGate() {
