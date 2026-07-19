@@ -880,7 +880,13 @@ function shadeForUser(name) {
   return `linear-gradient(135deg, hsl(${330 + hue - 60}, 90%, 65%), hsl(${30 + hue}, 95%, 65%))`;
 }
 
+function showChatPlaceholder(text) {
+  feed.innerHTML = `<div class="chat-placeholder" style="color:#fff2df;font-size:12px;opacity:0.75;padding:6px 2px;">${text}</div>`;
+}
+
 window.addChatMessage = function(username, text) {
+  const ph = feed.querySelector('.chat-placeholder');
+  if (ph) ph.remove();
   const msg = document.createElement('div');
   msg.className = 'msg';
   const shade = shadeForUser(username);
@@ -918,6 +924,7 @@ async function initChat() {
     }
     liveChatId = data.items?.[0]?.liveStreamingDetails?.activeLiveChatId;
     if (liveChatId) {
+      showChatPlaceholder('Connecting to live chat…');
       pollChat(gen);
     } else {
       feed.innerHTML = '<div style="color:#fff2df;font-size:12px;opacity:0.75;padding:6px 2px;">waiting for stream to go live…</div>';
@@ -954,6 +961,9 @@ async function pollChat(gen) {
     data.items?.forEach(item => {
       window.addChatMessage(item.authorDetails.displayName, item.snippet.displayMessage);
     });
+    if (!feed.querySelector('.msg')) {
+      showChatPlaceholder('Waiting for chat messages…');
+    }
     const interval = Math.max(data.pollingIntervalMillis || 5000, 5000);
     setTimeout(() => { if (gen === chatGen) pollChat(gen); }, interval);
   } catch (e) {
