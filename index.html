@@ -44,6 +44,19 @@
   .lg-signin-btn:disabled { opacity:0.6; cursor:default; }
   .lg-signin-btn svg { width:18px; height:18px; flex-shrink:0; }
   .lg-error { margin-top:16px; font-size:12px; color:#ff9d9d; min-height:14px; }
+
+  /* ===== Landing-page analytics summary ===== */
+  #home-analytics { display:none; margin-bottom:40px; }
+  #home-analytics h2 {
+    font-family:'Righteous',sans-serif; font-size:14px; letter-spacing:2px; text-transform:uppercase;
+    color:#ffe3c9; margin:0 0 14px;
+  }
+  #home-analytics-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap:14px; }
+  .ha-stat { background: rgba(255,255,255,0.04); border:1px solid rgba(255,180,140,0.3); border-radius:10px; padding:16px; text-align:center; }
+  .ha-stat-label { font-size:10px; letter-spacing:1px; text-transform:uppercase; opacity:0.65; margin-bottom:8px; }
+  .ha-stat-value { font-family:'Righteous',sans-serif; font-size:24px; background: linear-gradient(90deg, #ff8fd6, #ffab5e); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .ha-stat-err { font-size:11px; opacity:0.6; }
+  #home-analytics-more { display:block; text-align:right; font-size:12px; color:#ffab5e; text-decoration:none; margin-top:10px; }
   #menu-wrap h1 {
     font-family:'Righteous',sans-serif; font-size: 40px; letter-spacing: 2px; text-align:center;
     background: linear-gradient(90deg, #ff8fd6, #ffab5e); -webkit-background-clip:text; background-clip:text; color:transparent;
@@ -558,6 +571,17 @@
   <div id="menu-wrap">
     <h1>Sunset Stream Dashboard</h1>
     <p class="sub">One file, every overlay. In OBS, point each Browser Source at THIS file with a different <code>?scene=</code> value (e.g. <code>combined.html?scene=chat</code>). Opening it with no scene shows this picker.</p>
+
+    <div id="home-analytics">
+      <h2>Last 28 Days</h2>
+      <div id="home-analytics-grid">
+        <div class="ha-stat"><div class="ha-stat-label">Views</div><div class="ha-stat-value" id="ha-views">—</div></div>
+        <div class="ha-stat"><div class="ha-stat-label">Watch Time (hrs)</div><div class="ha-stat-value" id="ha-watchtime">—</div></div>
+        <div class="ha-stat"><div class="ha-stat-label">Subscribers Gained</div><div class="ha-stat-value" id="ha-subsgained">—</div></div>
+      </div>
+      <a id="home-analytics-more" href="?scene=dashboard">Full dashboard + stream scheduling &rarr;</a>
+    </div>
+
     <div id="menu-grid">
       <div class="menu-card">
       <div class="menu-card-title">Live Chat</div>
@@ -1578,10 +1602,10 @@ if (accessToken) showSignedIn();
           store.setItem('tp_access_token', tpToken);
           other.removeItem('tp_access_token');
           // Share the token with the Creator Dashboard scene so it's already
-          // signed in and can show analytics immediately, no second prompt.
+          // signed in there too if you follow the "full dashboard" link.
           store.setItem('dash_access_token', tpToken);
           other.removeItem('dash_access_token');
-          goToDashboard();
+          loadProfile();
         }
       });
       if (cb) cb();
@@ -1645,12 +1669,6 @@ if (accessToken) showSignedIn();
     });
   }
 
-  function goToDashboard() {
-    const url = new URL(location.href);
-    url.search = '?scene=dashboard';
-    location.href = url.toString();
-  }
-
   function showGate() {
     menuWrapEl.style.display = 'none';
     topProfileEl.style.display = 'none';
@@ -1661,6 +1679,32 @@ if (accessToken) showSignedIn();
     gateEl.classList.add('lg-hidden');
     menuWrapEl.style.display = 'block';
     topProfileEl.style.display = 'block';
+    document.getElementById('home-analytics').style.display = 'block';
+    loadHomeAnalytics();
+  }
+
+  async function loadHomeAnalytics() {
+    const viewsEl = document.getElementById('ha-views');
+    const watchEl = document.getElementById('ha-watchtime');
+    const subsEl  = document.getElementById('ha-subsgained');
+    try {
+      const end = new Date();
+      const start = new Date();
+      start.setDate(end.getDate() - 28);
+      const fmt = d => d.toISOString().slice(0, 10);
+      const url = `https://youtubeanalytics.googleapis.com/v2/reports?ids=channel%3D%3DMINE&startDate=${fmt(start)}&endDate=${fmt(end)}&metrics=views,estimatedMinutesWatched,subscribersGained`;
+      const res = await fetch(url, { headers: { Authorization: 'Bearer ' + tpToken } });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message || 'Analytics API error');
+      const row = data.rows?.[0] || [0, 0, 0];
+      viewsEl.textContent = (row[0] || 0).toLocaleString();
+      watchEl.textContent = Math.round((row[1] || 0) / 60).toLocaleString();
+      subsEl.textContent = (row[2] || 0).toLocaleString();
+    } catch (e) {
+      console.warn('Home analytics failed:', e.message);
+      [viewsEl, watchEl, subsEl].forEach(el => { el.textContent = '—'; el.classList.add('ha-stat-err'); });
+      viewsEl.title = watchEl.title = subsEl.title = e.message;
+    }
   }
 
   async function loadProfile() {
